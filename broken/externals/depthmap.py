@@ -3,15 +3,12 @@ import copy
 import sys
 from abc import ABC, abstractmethod
 from io import BytesIO
-from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, Any, Literal, Optional, TypeAlias, Union
+from typing import TYPE_CHECKING, Annotated, Any, Literal, TypeAlias, Union
 
 import numpy as np
 import xxhash
 from diskcache import Cache as DiskCache
-from halo import Halo
 from PIL import Image
-from PIL.Image import Image as ImageType
 from pydantic import Field, PrivateAttr
 from typer import Option
 
@@ -20,7 +17,6 @@ from broken.enumx import BrokenEnum
 from broken.envy import Environment
 from broken.externals import ExternalModelsBase, ExternalTorchBase
 from broken.loaders import LoadableImage, LoadImage
-from broken.model import BrokenModel
 from broken.path import BrokenPath
 from broken.project import PROJECT
 from broken.resolution import BrokenResolution
@@ -264,15 +260,14 @@ class DepthPro(DepthEstimatorBase):
         config = copy.deepcopy(DEFAULT_MONODEPTH_CONFIG_DICT)
         config.checkpoint_uri = checkpoint
 
-        with Halo("Creating DepthPro model"):
-            self._model, self._transform = BrokenCache.lru(
-                create_model_and_transforms
-            )(
-                precision=torch.float16,
-                device=self.device,
-                config=config
-            )
-            self._model.eval()
+        self._model, self._transform = BrokenCache.lru(
+            create_model_and_transforms
+        )(
+            precision=torch.float16,
+            device=self.device,
+            config=config
+        )
+        self._model.eval()
 
     def _estimate(self, image: np.ndarray) -> np.ndarray:
 

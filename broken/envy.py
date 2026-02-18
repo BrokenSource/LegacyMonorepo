@@ -137,4 +137,4 @@ class Runtime:
 if Runtime.uvx:
     # Find venv from "~/.cache/uv/archive-v0/(hash)/lib/python3.12/site-packages"
     _VIRTUAL_ENV = Path(site.getsitepackages()[0]).parent.parent.parent
-    os.environ.setdefault("VIRTUAL_ENV", _VIRTUAL_ENV)
+    os.environ.setdefault("VIRTUAL_ENV", str(_VIRTUAL_ENV))

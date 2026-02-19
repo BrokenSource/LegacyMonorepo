@@ -267,24 +267,6 @@ def hyphen_range(string: Optional[str], *, inclusive: bool=True) -> Iterable[int
         yield int(part)
 
 
-def limited_ratio(
-    number: Optional[float], *,
-    limit: float = None
-) -> Optional[tuple[int, int]]:
-    """Same as Number.as_integer_ratio but with an optional upper limit and optional return"""
-    if (number is None):
-        return None
-
-    num, den = number.as_integer_ratio()
-
-    if limit and (den > limit or num > limit):
-        normalize = limit/min(num, den)
-        num *= normalize
-        den *= normalize
-
-    return (int(num), int(den))
-
-
 def overrides(
     old: Any,
     new: Optional[Any],

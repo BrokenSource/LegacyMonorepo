@@ -281,38 +281,6 @@ def overrides(
     return new
 
 
-def install(*,
-    package: Union[str, Iterable[str]],
-    pypi: Optional[Union[str, Iterable[str]]]=None,
-    args: Optional[Union[str, Iterable[str]]]=None
-) -> None:
-    # Ensure arguments are tuples
-    package = flatten(package, cast=tuple)
-    pypi = flatten(pypi or package, cast=tuple)
-    args = flatten(args, cast=tuple)
-
-    caller = inspect.currentframe().f_back.f_globals
-
-    # Import the package and insert on the caller's globals
-    def inject_packages():
-        for item in package:
-            caller[package] = __import__(item)
-
-    try:
-        return inject_packages()
-    except ImportError:
-        logger.info(f"Installing packages: {package}..")
-
-    for method in (
-        (sys.executable, "-m", "uv", "pip", "install"),
-        (sys.executable, "-m", "pip", "install")
-    ):
-        if shell(*method, *pypi, *args).returncode == 0:
-            return inject_packages()
-
-    raise RuntimeError(logger.error(f"Failed to install packages: {package}"))
-
-
 def combinations(**options: Any) -> Iterable[DotMap]:
     """Returns a dictionary of key='this' of itertools.product"""
 
@@ -354,21 +322,6 @@ class BrokenSingleton(ABC):
             cls.__instance__ = self
         return cls.__instance__
 
-
-class BrokenAttrs:
-    """
-    Walk over an @attrs.defined class and call __post__ on all classes in the MRO
-    Warn: Must NOT define __attrs_post_init__ in an inheriting class
-    Fixme: Can improve by starting on BrokenAttrs itself
-    """
-    def __attrs_post_init__(self):
-        for cls in reversed(type(self).mro()):
-            if method := cls.__dict__.get("__post__"):
-                method(self)
-
-    @abstractmethod
-    def __post__(self) -> None:
-        ...
 
 
 

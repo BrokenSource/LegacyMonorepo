@@ -1,15 +1,14 @@
+import builtins
 import math
 from numbers import Number
-from typing import Optional, Union
-import builtins
+from typing import Optional
+
 
 class BrokenResolution:
 
     @staticmethod
-    def nearest(*numbers: Number, multiple: int=2) -> Union[int, tuple[int, ...]]:
-        """Round to the nearest multiple of 2, returns a single value or a tuple of values"""
-        values = tuple(max(multiple, multiple*round(value/multiple)) for value in numbers)
-        return (values[0] if (len(values) == 1) else values)
+    def nearest(value: Number, multiple: int=2) -> Number:
+        return multiple * round(value/multiple)
 
     @classmethod
     def fit(cls,
@@ -104,7 +103,10 @@ class BrokenResolution:
             width  = min(width,  max_width or math.inf)
             height = min(height, max_height or math.inf)
 
-        return cls.nearest(width*scale, height*scale, multiple=multiple)
+        return (
+            cls.nearest(width *scale, multiple=multiple),
+            cls.nearest(height*scale, multiple=multiple)
+        )
 
 # ---------------------------------------------------------------------------- #
 
@@ -113,9 +115,7 @@ class __pytest__:
         assert BrokenResolution.nearest(100) == 100
         assert BrokenResolution.nearest(2.5) == 2
         assert BrokenResolution.nearest(3.2) == 4
-        assert BrokenResolution.nearest(1920, 1080)   == (1920, 1080)
-        assert BrokenResolution.nearest(1921, 1080.0) == (1920, 1080)
-        assert BrokenResolution.nearest(1921.5, 1080) == (1922, 1080)
+        assert BrokenResolution.nearest(1080.0) == 1080
 
     def test_keep_nothing(self):
         assert BrokenResolution.fit(old=(1920, 1080)) == (1920, 1080)
@@ -145,4 +145,3 @@ class __pytest__:
     def test_limit_maximum_resolution(self):
         assert BrokenResolution.fit(old=(3840, 2160), new=(3800, 2100), max=(1920, 1080)) == (1920, 1080)
         assert BrokenResolution.fit(old=(3000, 3000), new=(2000, 2000), max=(6000, 720), ar=16/9) == (1280, 720)
-

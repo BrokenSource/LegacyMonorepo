@@ -11,13 +11,13 @@ from typing import Annotated, Literal, Optional, TypeAlias, Union
 from PIL import Image
 from PIL.Image import Image as ImageType
 from pydantic import ConfigDict, Field
+from shaderflow.resolution import BrokenResolution
 from typer import Option
 
 from broken import logger
 from broken.enumx import BrokenEnum
 from broken.externals import ExternalModelsBase
 from broken.loaders import LoadableImage, LoadImage
-from broken.resolution import BrokenResolution
 from broken.typerx import BrokenTyper
 from broken.utils import denum
 

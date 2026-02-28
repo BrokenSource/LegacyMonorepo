@@ -1,58 +1,12 @@
-<div align="center">
-  <a href="https://brokensrc.dev"><img src="https://raw.githubusercontent.com/BrokenSource/BrokenSource/main/broken/resources/images/logo.png" width="200"></a>
-  <h2 style="margin-top: 0">Broken Source Software</h2>
-  <a href="https://pypi.org/project/broken-source/"><img src="https://img.shields.io/pypi/v/broken-source?label=PyPI&color=blue"></a>
-  <a href="https://pypi.org/project/broken-source/"><img src="https://img.shields.io/pypi/dw/broken-source?label=Installs&color=blue"></a>
-  <a href="https://github.com/BrokenSource/BrokenSource"><img src="https://img.shields.io/github/v/tag/BrokenSource/BrokenSource?label=GitHub&color=orange"></a>
-  <a href="https://github.com/BrokenSource/BrokenSource/stargazers"><img src="https://img.shields.io/github/stars/BrokenSource/BrokenSource?label=Stars&style=flat&color=orange"></a>
-  <a href="https://discord.gg/KjqvcYwRHm"><img src="https://img.shields.io/discord/1184696441298485370?label=Discord&style=flat&color=purple"></a>
-</div>
-
-<br>
-
 > [!NOTE]
-> This repository is the main development environment for all my professional and personal projects, including libraries, applications, infrastructure and some private components.
->
-> <sup><b>Warning:</b> Expect a developer-centric experience within a complex monorepo structure 🙂</sup>
+> This repository once hosted the code for a shared library named [`broken-source`](https://pypi.org/project/broken-source/), alongside docker images, main website, monorepo and documentation for all projects.
 
-Always evolving code, a wisdom rabbit hole to know the ins and outs of the system as a whole. I could only hope to ever have it all properly documented, as the focus is always on the code itself.
+As time went on, requirements changes and lessons are naturally learned - just because something has come to an end doesn't imply failure, but rather haunting on how useful it was and the legacy it leaves.
 
-- This readme is intentionally vague in a sense, as there's just too much going on. Instead of talking about everything and nothing at the same time, go exploring the self-documented codebase!
-- Feel free to get in touch to learn how it works or python monorepos advice.
+- A new repository under the same name was created to host a purely virtual workspace. This does break source install scripts, but they were going to be deprecated soon for simplicity, anyway.
+- Submodules aren't as flexible as they seem, using the root repository .git for storing metadata and blobs makes them harder to move around in eventual restructuring and feel like a liability.
+- Most of the code has been moved or inlined into projects that use the specific parts, or made into separate repositories (eg. [docker images](https://github.com/BrokenSource/Containers)) to be more focused and easier to maintain. Monorepos work _really well_ for when the whole acts as a single unit, an idea that diverged in my projects.
+- No content seen here represents latest thoughts or practices, and certainly becomes less and less relevant as time goes on, given the constant evolution in better ways to do things.
+- Content will be kept for a while for reference in porting and historical, trust reasons.
 
-
-## 📦 Structure
-
-Roughly speaking, the important parts are:
-
-### ♻️ Common
-
-- [`📁/.github`](./.github): Workflows, readmes + [special](https://github.com/BrokenSource/.github) organization repository
-- [`📁/website`](./website): Mkdocs documentation derived from [`mkdocs-base.yml`](./mkdocs-base.yml)
-
-### 🗿 Monorepo
-
-- [`📁/docker`](./docker): Everything docker for all projects
-- `📁/meta`: Optional directory to link off-branch projects
-- [`📁/projects`](./projects): Application projects (has entry points)
-- [`📁/packages`](./packages): Library projects (
-- [`action.yml`](./action.yml): Setup workflow
-
-### 🐍 Python
-
-- `📁/.venv`: Global venv from [uv](https://github.com/astral-sh/uv)
-- [`📁/broken`](./broken): Main shared library
-- `📁/dist`: Common build directory
-
-### 🦀 Rust
-
-- [`📁/crates`](./crates): Library projects
-- `📁/target`: Build directory
-
-
-## 💡 Tips
-
-- Export `PYTHONPYCACHEPREFIX=/tmp/__pycache__` in `/etc/environment` to avoid `*.pyc` clutter
-- Always run `uv sync --all-packages` or `uv sync --package (name)` for select projects
-- Use `docker compose run --rm --build (service)` from [`docker-compose.yml`](./docker-compose.yml)
-- Add `root="/tmp/containerd"` in `/etc/containerd/config.toml ` if you got the RAM to save SSD in Docker
+⚠️ Note that eventually (maybe in a year or two), this archived repository will be deleted along the deprecated shared library on PyPI. Nothing important will be lost, as things will adapt by then, providing a significantly better user experience and maintainability. Legacy unsupported code will not matter.
